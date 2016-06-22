@@ -71,13 +71,18 @@ exports.isUrlArchived = function(url, cb){
 
 exports.downloadUrls = function(urls){
   urls.forEach(function(url){
-    var options = {
-      host: url.parse(url).host,
-      port: 80,
-      path: url.parse(url).pathname
-    };
-
-    console.log(url.pathname);
-    var file_name = paths.archivedSites + "/" + url;
+    http.get('http://'+url,function(res){
+      var body = '';
+      res.on('data',function(d){
+        body += d
+      });
+      res.on('end', function(){
+        fs.writeFile(paths.archivedSites + "/" + url, body, function(err) {
+          if (err) {
+            return console.error(err);
+          }
+        })
+      });
+    });
   });
 };
