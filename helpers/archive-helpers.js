@@ -31,7 +31,12 @@ exports.readListOfUrls = function(){
 exports.isUrlInList = function(){
 };
 
-exports.addUrlToList = function(){
+exports.addUrlToList = function(url){
+  fs.appendFile('archives/sites.txt', url + "\n", function (err) {
+    if (err) {
+      console.error("addsite error:", err);
+    }
+  });
 };
 
 exports.isUrlArchived = function(){
