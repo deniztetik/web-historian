@@ -65,7 +65,11 @@ exports.addUrlToList = function(url, cb){
 
 exports.isUrlArchived = function(url, cb){
   fs.exists(paths.archivedSites + "/" + url, function(exists){
-    cb(exists);
+    if (cb) {
+      cb(exists);
+    } else {
+      return exists;
+    }
   })
 };
 
@@ -74,7 +78,7 @@ exports.downloadUrls = function(urls){
     http.get('http://'+url,function(res){
       var body = '';
       res.on('data',function(d){
-        body += d
+        body += d;
       });
       res.on('end', function(){
         fs.writeFile(paths.archivedSites + "/" + url, body, function(err) {
